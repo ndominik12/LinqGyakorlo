@@ -25,6 +25,10 @@ namespace LinqGyakorlo
             Feladat10();
             Feladat11();
             Feladat12();
+            Feladat13();
+            Feladat14();
+            Feladat15();
+            Feladat16();
             // Feladat09();
             // Feladat10();
             // Feladat11();
@@ -222,13 +226,33 @@ namespace LinqGyakorlo
         // 13. Átlagos tanulmányi átlag városonként.
         static void Feladat13()
         {
-            // TODO
+            var avgByCity = SampleData.Students
+                .GroupBy(s => s.City)
+                .Select(g => new { City = g.Key, Avg = g.Average(s => s.GradeAverage) })
+                .OrderBy(x => x.City);
+
+            Console.WriteLine("13. Átlagos tanulmányi átlag városonként:");
+            foreach (var x in avgByCity)
+                Console.WriteLine($"{x.City}: {x.Avg:0.00}");
+            Console.WriteLine();
         }
 
         // 14. Kurzusnevek kategóriánként.
         static void Feladat14()
         {
-            // TODO
+            var byCategory = SampleData.Courses
+                .GroupBy(c => c.Category)
+                .Select(g => new { Category = g.Key, Courses = g.Select(c => c.Name).ToList() })
+                .OrderBy(g => g.Category);
+
+            Console.WriteLine("14. Kurzusnevek kategóriánként:");
+            foreach (var g in byCategory)
+            {
+                Console.WriteLine(g.Category + ":");
+                foreach (var name in g.Courses)
+                    Console.WriteLine("  " + name);
+            }
+            Console.WriteLine();
         }
 
         // ---------- 5. Összekapcsolás — Join, GroupJoin ----------
@@ -236,13 +260,35 @@ namespace LinqGyakorlo
         // 15. Enrollments + Students Join: hallgató neve minden beiratkozáshoz.
         static void Feladat15()
         {
-            // TODO
+            var q = SampleData.Enrollments
+                .Join(SampleData.Students,
+                    e => e.StudentId,
+                    s => s.Id,
+                    (e, s) => new { e.CourseId, e.Grade, StudentName = s.Name });
+
+            Console.WriteLine("15. Enrollments + Students Join (hallgató neve minden beiratkozáshoz):");
+            foreach (var item in q)
+                Console.WriteLine($"{item.StudentName} - CourseId={item.CourseId}, Grade={item.Grade}");
+            Console.WriteLine();
         }
 
         // 16. Háromtáblás Join: hallgató neve, kurzus neve, érdemjegy.
         static void Feladat16()
         {
-            // TODO
+            var q = SampleData.Enrollments
+                .Join(SampleData.Students,
+                    e => e.StudentId,
+                    s => s.Id,
+                    (e, s) => new { e, Student = s })
+                .Join(SampleData.Courses,
+                    es => es.e.CourseId,
+                    c => c.Id,
+                    (es, c) => new { StudentName = es.Student.Name, CourseName = c.Name, Grade = es.e.Grade });
+
+            Console.WriteLine("16. Háromtáblás Join: hallgató neve, kurzus neve, érdemjegy:");
+            foreach (var item in q)
+                Console.WriteLine($"{item.StudentName} - {item.CourseName} - Grade={item.Grade}");
+            Console.WriteLine();
         }
 
         // 17. GroupJoin: hallgatónként a beiratkozásai (azok is, akiknek nincs).
