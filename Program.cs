@@ -32,6 +32,10 @@ namespace LinqGyakorlo
             Feladat17();
             Feladat18();
             Feladat19();
+            Feladat20();
+            Feladat21();
+            Feladat22();
+            Feladat23();
             // Feladat09();
             // Feladat10();
             // Feladat11();
@@ -357,19 +361,58 @@ namespace LinqGyakorlo
         // 20. Union, Intersect, Except a "kiváló" (átlag >= 4.5) és "budapesti" hallgatók nevei között.
         static void Feladat20()
         {
-            // TODO
+            var kivalo = SampleData.Students
+                .Where(s => s.GradeAverage >= 4.5)
+                .Select(s => s.Name);
+
+            var budapestiek = SampleData.Students
+                .Where(s => string.Equals(s.City, "Budapest", StringComparison.OrdinalIgnoreCase))
+                .Select(s => s.Name);
+
+            var union = kivalo.Union(budapestiek);
+            var intersect = kivalo.Intersect(budapestiek);
+            var except = kivalo.Except(budapestiek);
+
+            Console.WriteLine("20. Union / Intersect / Except a 'kiváló' és 'budapesti' hallgatók nevei között:");
+            Console.WriteLine("Union:");
+            foreach (var n in union) Console.WriteLine("  " + n);
+            Console.WriteLine("Intersect (kiváló és budapesti):");
+            foreach (var n in intersect) Console.WriteLine("  " + n);
+            Console.WriteLine("Except (kiváló, de nem budapesti):");
+            foreach (var n in except) Console.WriteLine("  " + n);
+            Console.WriteLine();
         }
 
         // 21. Concat: Matematika + Informatika kurzusnevek.
         static void Feladat21()
         {
-            // TODO
+            var math = SampleData.Courses
+                .Where(c => c.Category == "Matematika")
+                .Select(c => c.Name);
+
+            var info = SampleData.Courses
+                .Where(c => c.Category == "Informatika")
+                .Select(c => c.Name);
+
+            var concat = math.Concat(info);
+
+            Console.WriteLine("21. Concat: Matematika + Informatika kurzusnevek:");
+            foreach (var n in concat) Console.WriteLine("  " + n);
+            Console.WriteLine();
         }
 
         // 22. Zip: első 4 hallgató neve + első 4 kurzus neve párban.
         static void Feladat22()
         {
-            // TODO
+            var students = SampleData.Students.Select(s => s.Name).Take(4);
+            var courses = SampleData.Courses.Select(c => c.Name).Take(4);
+
+            var zipped = students.Zip(courses, (s, c) => new { Student = s, Course = c });
+
+            Console.WriteLine("22. Zip: első 4 hallgató neve + első 4 kurzus neve párban:");
+            foreach (var p in zipped)
+                Console.WriteLine($"  {p.Student}  —  {p.Course}");
+            Console.WriteLine();
         }
 
         // ---------- 7. Aggregálás — Count, Sum, Average, Min, Max, Aggregate ----------
@@ -377,7 +420,13 @@ namespace LinqGyakorlo
         // 23. Hallgatók száma összesen, illetve akiknek átlaga > 4.0 (Count).
         static void Feladat23()
         {
-            // TODO
+            var total = SampleData.Students.Count();
+            var above4 = SampleData.Students.Count(s => s.GradeAverage > 4.0);
+
+            Console.WriteLine("23. Hallgatók száma összesen, illetve akiknek átlaga > 4.0:");
+            Console.WriteLine($"Összesen: {total}");
+            Console.WriteLine($"Átlaga > 4.0: {above4}");
+            Console.WriteLine();
         }
 
         // 24. Az összes kurzus kredit-összege (Sum).
