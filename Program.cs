@@ -17,10 +17,10 @@ namespace LinqGyakorlo
             Feladat02();
             Feladat03();
             Feladat04();
-            // Feladat05();
-            // Feladat06();
-            // Feladat07();
-            // Feladat08();
+            Feladat05();
+            Feladat06();
+            Feladat07();
+            Feladat08();
             // Feladat09();
             // Feladat10();
             // Feladat11();
@@ -110,25 +110,55 @@ namespace LinqGyakorlo
         // 5. Csak a hallgatók nevei.
         static void Feladat05()
         {
-            // TODO
+            var names = SampleData.Students
+                .Select(s => s.Name);
+
+            Console.WriteLine("5. Csak a hallgatók nevei:");
+            foreach (var n in names)
+                Console.WriteLine(n);
+            Console.WriteLine();
         }
 
         // 6. Anonim típusú lista: Name, GradeAverage.
         static void Feladat06()
         {
-            // TODO
+            var list = SampleData.Students
+                .Select(s => new { s.Name, s.GradeAverage });
+
+            Console.WriteLine("6. Név és átlag (anonim típus):");
+            foreach (var item in list)
+                Console.WriteLine($"{item.Name} - {item.GradeAverage:0.00}");
+            Console.WriteLine();
         }
 
         // 7. Kurzus neve + a kurzust tartó tanár neve (Select, Join nélkül).
         static void Feladat07()
         {
-            // TODO
+            var q = SampleData.Courses
+                .Select(c => new
+                {
+                    CourseName = c.Name,
+                    TeacherName = SampleData.Teachers.FirstOrDefault(t => t.Id == c.TeacherId)?.Name ?? "(ismeretlen)"
+                });
+
+            Console.WriteLine("7. Kurzus + tanár neve (Select, Join nélkül):");
+            foreach (var it in q)
+                Console.WriteLine($"{it.CourseName} — {it.TeacherName}");
+            Console.WriteLine();
         }
 
         // 8. SelectMany: beiratkozások lapos listája hallgató névvel.
         static void Feladat08()
         {
-            // TODO
+            var flat = SampleData.Students
+                .SelectMany(s => SampleData.Enrollments
+                    .Where(e => e.StudentId == s.Id)
+                    .Select(e => new { StudentName = s.Name, e.CourseId, e.Grade }));
+
+            Console.WriteLine("8. Beiratkozások lapos listája (SelectMany):");
+            foreach (var e in flat)
+                Console.WriteLine($"{e.StudentName} - CourseId={e.CourseId}, Grade={e.Grade}");
+            Console.WriteLine();
         }
 
         // ---------- 3. Rendezés — OrderBy, ThenBy, Reverse ----------
