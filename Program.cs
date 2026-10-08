@@ -13,10 +13,10 @@ namespace LinqGyakorlo
             // Írd meg a LINQ lekérdezést a metódus törzsében, majd
             // vedd ki a kommentet a hívása elől, hogy lásd az eredményt.
 
-            // Feladat01();
-            // Feladat02();
-            // Feladat03();
-            // Feladat04();
+            Feladat01();
+            Feladat02();
+            Feladat03();
+            Feladat04();
             // Feladat05();
             // Feladat06();
             // Feladat07();
@@ -60,25 +60,49 @@ namespace LinqGyakorlo
         // 1. Hallgatók, akiknek 4.0 fölötti az átlaga.
         static void Feladat01()
         {
-            // TODO
+            var query = SampleData.Students
+                .Where(s => s.GradeAverage > 4.0);
+
+            Console.WriteLine("1. Hallgatók, akiknek 4.0 fölötti az átlaga:");
+            foreach (var s in query)
+                Console.WriteLine(s);
+            Console.WriteLine();
         }
 
         // 2. Budapesti hallgatók.
         static void Feladat02()
         {
-            // TODO
+            var budapestiek = SampleData.Students
+                .Where(s => string.Equals(s.City, "Budapest", StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine("2. Budapesti hallgatók:");
+            foreach (var s in budapestiek)
+                Console.WriteLine(s);
+            Console.WriteLine();
         }
 
         // 3. Kurzusok, amelyek kreditértéke legalább 5.
         static void Feladat03()
         {
-            // TODO
+            var kurzusok = SampleData.Courses
+                .Where(c => c.Credit >= 5);
+
+            Console.WriteLine("3. Kurzusok, amelyek kreditértéke legalább 5:");
+            foreach (var c in kurzusok)
+                Console.WriteLine(c);
+            Console.WriteLine();
         }
 
         // 4. Hallgatók 20-23 év között (határokkal), akik nem budapestiek.
         static void Feladat04()
         {
-            // TODO
+            var students = SampleData.Students
+                .Where(s => s.Age >= 20 && s.Age <= 23 && !string.Equals(s.City, "Budapest", StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine("4. 20-23 év közötti, nem budapesti hallgatók:");
+            foreach (var s in students)
+                Console.WriteLine(s);
+            Console.WriteLine();
         }
 
         // ---------- 2. Vetítés — Select, SelectMany ----------
