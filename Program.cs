@@ -21,6 +21,10 @@ namespace LinqGyakorlo
             Feladat06();
             Feladat07();
             Feladat08();
+            Feladat09();
+            Feladat10();
+            Feladat11();
+            Feladat12();
             // Feladat09();
             // Feladat10();
             // Feladat11();
@@ -166,19 +170,37 @@ namespace LinqGyakorlo
         // 9. Hallgatók átlag szerint csökkenő sorrendben.
         static void Feladat09()
         {
-            // TODO
+            var ordered = SampleData.Students
+                .OrderByDescending(s => s.GradeAverage);
+
+            Console.WriteLine("9. Hallgatók átlag szerint csökkenő sorrendben:");
+            foreach (var s in ordered)
+                Console.WriteLine(s);
+            Console.WriteLine();
         }
 
         // 10. Hallgatók város szerint, majd név szerint növekvő sorrendben.
         static void Feladat10()
         {
-            // TODO
+            var ordered = SampleData.Students
+                .OrderBy(s => s.City)
+                .ThenBy(s => s.Name);
+
+            Console.WriteLine("10. Hallgatók város szerint, majd név szerint növekvő sorrendben:");
+            foreach (var s in ordered)
+                Console.WriteLine(s);
+            Console.WriteLine();
         }
 
         // 11. Kurzusok eredeti sorrendjének megfordítása (Reverse).
         static void Feladat11()
         {
-            // TODO
+            var reversed = SampleData.Courses.AsEnumerable().Reverse();
+
+            Console.WriteLine("11. Kurzusok eredeti sorrendjének megfordítása (Reverse):");
+            foreach (var c in reversed)
+                Console.WriteLine(c);
+            Console.WriteLine();
         }
 
         // ---------- 4. Csoportosítás — GroupBy ----------
@@ -186,7 +208,15 @@ namespace LinqGyakorlo
         // 12. Hallgatók száma városonként.
         static void Feladat12()
         {
-            // TODO
+            var grouped = SampleData.Students
+                .GroupBy(s => s.City)
+                .Select(g => new { City = g.Key, Count = g.Count() })
+                .OrderBy(g => g.City);
+
+            Console.WriteLine("12. Hallgatók száma városonként:");
+            foreach (var g in grouped)
+                Console.WriteLine($"{g.City}: {g.Count}");
+            Console.WriteLine();
         }
 
         // 13. Átlagos tanulmányi átlag városonként.
