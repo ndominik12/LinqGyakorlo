@@ -29,6 +29,9 @@ namespace LinqGyakorlo
             Feladat14();
             Feladat15();
             Feladat16();
+            Feladat17();
+            Feladat18();
+            Feladat19();
             // Feladat09();
             // Feladat10();
             // Feladat11();
@@ -294,7 +297,30 @@ namespace LinqGyakorlo
         // 17. GroupJoin: hallgatónként a beiratkozásai (azok is, akiknek nincs).
         static void Feladat17()
         {
-            // TODO
+            var q = SampleData.Students
+                .GroupJoin(SampleData.Enrollments,
+                    s => s.Id,
+                    e => e.StudentId,
+                    (s, enrolls) => new { Student = s, Enrollments = enrolls });
+
+            Console.WriteLine("17. GroupJoin: hallgatónként a beiratkozásai (akár üres is):");
+            foreach (var item in q)
+            {
+                Console.WriteLine(item.Student.Name + ":");
+                if (item.Enrollments.Any())
+                {
+                    foreach (var e in item.Enrollments)
+                    {
+                        var courseName = SampleData.Courses.FirstOrDefault(c => c.Id == e.CourseId)?.Name ?? "(ismeretlen kurzus)";
+                        Console.WriteLine($"  {courseName} - Grade={e.Grade}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("  (nincs beiratkozása)");
+                }
+            }
+            Console.WriteLine();
         }
 
         // ---------- 6. Halmazműveletek — Distinct, Union, Intersect, Except, Concat, Zip ----------
@@ -302,13 +328,30 @@ namespace LinqGyakorlo
         // 18. Hány különböző város van a hallgatók között (Distinct).
         static void Feladat18()
         {
-            // TODO
+            var distinctCities = SampleData.Students
+                .Select(s => s.City)
+                .Distinct()
+                .ToList();
+
+            Console.WriteLine("18. Hány különböző város van a hallgatók között (Distinct):");
+            Console.WriteLine($"{distinctCities.Count} város:");
+            foreach (var c in distinctCities)
+                Console.WriteLine("  " + c);
+            Console.WriteLine();
         }
 
         // 19. Különböző kurzuskategóriák (Distinct).
         static void Feladat19()
         {
-            // TODO
+            var categories = SampleData.Courses
+                .Select(c => c.Category)
+                .Distinct()
+                .ToList();
+
+            Console.WriteLine("19. Különböző kurzuskategóriák (Distinct):");
+            foreach (var cat in categories)
+                Console.WriteLine("  " + cat);
+            Console.WriteLine();
         }
 
         // 20. Union, Intersect, Except a "kiváló" (átlag >= 4.5) és "budapesti" hallgatók nevei között.
